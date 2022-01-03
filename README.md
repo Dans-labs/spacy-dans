@@ -1,5 +1,5 @@
-# Spacy DANS
-SpaCy DANS (or "spacy dance") is SpaCy's library based Machine Learning pipeline is being developed by DANS R&D group in the CLARIAH+ project (Common Lab Research Infrastructure for the Arts and Humanities) for WP3 task on the CMDI metadata enrichment in Dataverse data repository. 
+# SpaCy DANS
+SpaCy DANS (or "spacy dance") is SpaCy's library based Machine Learning pipeline is being developed by DANS R&D group in the CLARIAH+ project (Common Lab Research Infrastructure for the Arts and Humanities) for the WP3 task on the CMDI metadata enrichment and linkage in the Dataverse data repository. 
 
 # CLARIAH WP3 Challenges for FAIR CMDI metadata 
 
