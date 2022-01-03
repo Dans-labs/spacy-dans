@@ -1,5 +1,5 @@
-# spacy-dans
-Spacy based Machine Learning pipeline for CLARIAH WP3 task on Dataverse metadata enrichment
+# Spacy DANS
+This is Spacy based Machine Learning pipeline for CLARIAH WP3 task on Dataverse metadata enrichment. It's being developed by DANS R&D group in the CLARIAH project.
 
 # CLARIAH WP3 Challenges for FAIR CMDI metadata 
 
