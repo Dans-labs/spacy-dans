@@ -26,6 +26,10 @@ The service should be available on port 3000, for example, http://0.0.0.0:3000
 To run the pipeline via Docker, you'll need a working installation of docker and docker-compose, and running instance of Doccano.
 Copy the sample file to .env and change enviromental variables and credentials to make a connection to your Doccano service: 
 ```
+
+# Academic publications and presentations
+* Slava Tykhonov, Jerry de Vries, Andrea Scharnhorst, Eko Indarto, Mike Priddy, Femmy Admiraal. "Flexible metadata schemes for research data repositories The Common Framework in Dataverse and the CMDI use case". CLARIN 2021 Annual Conference (2021). (PDF)[https://github.com/Dans-labs/spacy-dans/raw/master/docs/Flexible_metadata_schemes_CMDI.pdf] 
+* Slava Tykhonov, Andrea Scharnhorst. "Research Observatory: Research Repositories and Dataverse: Negotiating Metadata, Vocabularies and Domain Needs". ISKO UK (2021). (Event information)[https://www.iskouk.org/event-4527328], (recording)[https://www.youtube.com/watch?v=bw_EkE9WLjc&t=2s] and (PDF)[https://www.iskouk.org/resources/Documents/EventsUploads/KO-%20RO/2021-11-24-slides-KORO-VTykhonov-AScharnhorst.pdf]
 cp .env_sample .env
 ```
 Open .env file and fill DOCCANO_URL, DOCCANO_USER and DOCCANO_PASSWORD. Now build and run the infrastructure:
