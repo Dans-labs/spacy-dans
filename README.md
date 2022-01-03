@@ -14,12 +14,24 @@ There are five challenges that we defined in this work.
 
 This pipeline is based on [Doccano](https://github.com/doccano/doccano), an Open Source text annotation tool for humans. It provides annotation features for text classification, sequence labeling and sequence to sequence tasks and was extended with integration layer to train models based on Dataverse Metadata. 
 
-You can install and run Doccano by following the commands below:
+You can install and run Doccano by running the commands below:
 ```
 git clone https://github.com/doccano/doccano
 cd doccano
 docker-compose -f docker-compose.dev.yml up -d
 ```
 The service should be available on port 3000, for example, http://0.0.0.0:3000
+
+# Install and run Spacy DANS
+To run the pipeline via Docker, you'll need a working installation of docker and docker-compose, and running instance of Doccano.
+Copy the sample file to .env and change enviromental variables and credentials to make a connection to your Doccano service: 
+```
+cp .env_sample .env
+```
+Open .env file and fill DOCCANO_URL, DOCCANO_USER and DOCCANO_PASSWORD. Now build and run the infrastructure:
+```
+docker-compose up -d
+```
+
 
 
