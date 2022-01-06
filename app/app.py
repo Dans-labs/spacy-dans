@@ -18,7 +18,7 @@ from starlette.staticfiles import StaticFiles
 #from src.model import Vocabularies, WriteXML
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
-from Annotation import dataverse_metadata
+from Annotation import dataverse_metadata, save_annotation, doccano_annotation
 import xml.etree.ElementTree as ET
 import requests
 import re
@@ -29,7 +29,7 @@ import subprocess
 from dateutil.parser import parse
 import urllib
 import subprocess
-#from spacynlp import *
+from SpacyDans import *
 from bs4 import BeautifulSoup
 from readabilipy import simple_json_from_html_string
 #import codecs
@@ -101,6 +101,7 @@ def version():
 
 @app.get("/dataverse")
 async def dataverse(baseurl: str, doi: str, token: Optional[str] = None):
+    params = []
     if token:
         api = NativeApi(baseurl, token)
         metadata = api.get_dataset(doi, auth=True)
@@ -111,10 +112,18 @@ async def dataverse(baseurl: str, doi: str, token: Optional[str] = None):
         response = resp.json()['datasetVersion']['metadataBlocks']['citation']
 
     if response:
-        (metastream, spacydata) = dataverse_metadata(response)
-        return metastream
+        metadata = dataverse_metadata(response)
+        metadata['plain_text'] = metadata['content']['text']
+        data = ngrams_tokens(False, metadata, params)
+        if 'original_entities' in data:
+            for item in data['original_entities']:
+                item['type'] = 'ML'
+                metadata['original_entities'].append(item)
+            if metadata:
+                return save_annotation(metadata)
+        return 'Error: no entities found in metadata'
     else:
-        return 'Error: no metadata'
+        return 'Error: no metadata found'
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=9266)
