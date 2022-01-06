@@ -31,10 +31,10 @@ def dataverse_metadata(response):
     for item in metadata['content']['fulltext'].split('. '):
         metadata['content']['text'].append({'text': item})
     for item in metadata['keywords']:
-        metadata['original_entities'].append({'entity': item.strip(), 'label': 'keyword'})
-    if metadata:
-        return save_annotation(metadata)
-    return 
+        metadata['original_entities'].append({'entity': item.strip(), 'label': 'keyword', 'type': 'human' })
+#    if metadata:
+#        return save_annotation(metadata)
+    return metadata 
 
 def doccano_annotation(document):
     results = []
