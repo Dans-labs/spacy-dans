@@ -101,11 +101,20 @@ def version():
 
 @app.get("/dataverse")
 async def dataverse(baseurl: str, doi: str, token: Optional[str] = None):
-    api = NativeApi(baseurl, token)
-    metadata = api.get_dataset(doi, auth=True)
-    response = metadata.json()["data"]["latestVersion"]["metadataBlocks"]["citation"]
-    (metastream, spacydata) = dataverse_metadata(response)
-    return metastream
+    if token:
+        api = NativeApi(baseurl, token)
+        metadata = api.get_dataset(doi, auth=True)
+        response = metadata.json()["data"]["latestVersion"]["metadataBlocks"]["citation"]
+    else:
+        url = "%s/api/datasets/export?exporter=dataverse_json&persistentId=%s" % (baseurl, doi)
+        resp = requests.get(url=url)
+        response = resp.json()['datasetVersion']['metadataBlocks']['citation']
+
+    if response:
+        (metastream, spacydata) = dataverse_metadata(response)
+        return metastream
+    else:
+        return 'Error: no metadata'
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=9266)
