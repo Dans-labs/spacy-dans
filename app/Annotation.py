@@ -30,8 +30,9 @@ def dataverse_metadata(response):
     metadata['original_entities'] = []
     for item in metadata['content']['fulltext'].split('. '):
         metadata['content']['text'].append({'text': item})
-    for item in metadata['keywords']:
-        metadata['original_entities'].append({'entity': item.strip(), 'label': 'keyword', 'type': 'human' })
+    if 'keywords' in metadata:
+        for item in metadata['keywords']:
+            metadata['original_entities'].append({'entity': item.strip(), 'label': 'keyword', 'type': 'human' })
 #    if metadata:
 #        return save_annotation(metadata)
     return metadata 
