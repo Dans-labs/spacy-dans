@@ -1,0 +1,15 @@
+[
+{
+  "vocab-name":"licence",
+  "minChars": 1,
+  "cvoc-url":"https://skosmos.labs.coronawhy.org/",
+  "language":"en",
+  "js-url":"/resources/js/cvoc-interface.js",
+  "protocol": "skosmos",
+  "vocab-uri" : "https://spdx.org/licenses/", 
+  "term-parent-uri": "",
+  "vocabs":["licence"],
+  "vocab-codes": ["licenceVocabulary", "licenceTerm", "licenceTermURI", "licenceVocabularyURI"]
+}
+]
+
