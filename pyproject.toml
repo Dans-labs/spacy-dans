@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "dans-AI-service"
+name = "spacy-dans"
 version = "0.1.0"
 description = ""
 authors = ["ekoi <eko.indarto@dans.knaw.nl>"]
