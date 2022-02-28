@@ -22,7 +22,7 @@ RUN npm install -g wikibase-cli
 COPY ./conf /app/conf
 COPY ./static/ /app/static
 #COPY ./templates /app/templates
-COPY ./app /app
-COPY ./app/app.py /app/main.py
+COPY spacy-dans /app
+COPY spacy-dans/app.py /app/main.py
 RUN pip install -r /app/requirements.txt
-COPY ./app/simple_json.py /usr/local/lib/python3.7/site-packages/readabilipy/simple_json.py
+COPY spacy-dans/simple_json.py /usr/local/lib/python3.7/site-packages/readabilipy/simple_json.py

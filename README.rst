@@ -1,0 +1,1 @@
+poetry add spacy nltk textacy datefinder asyncio pymongo elasticsearch pandas aiofiles jinja2 pandas future==0.17.1 bs4 lxml langdetect readabilipy doccano-client fastapi uvicorn pyDataverse pdfplumber
