@@ -41,7 +41,7 @@ def custom_openapi():
         return app.openapi_schema
 
     openapi_schema = get_openapi(
-        title="DANS Machine Learning API",
+        title="Spacy DANS",
         description="Annotation service dedicated for Machine Learning and Linked Open Data tasks.",
         version="0.1",
         routes=app.routes,
