@@ -4,6 +4,7 @@ import os
 import tempfile
 import time
 from doccano_api_client import DoccanoClient
+from urllib.parse import urlparse
 import re
 
 DOCCANO_PROJECT_ID = 12
@@ -33,8 +34,8 @@ def dataverse_metadata(response):
     if 'keywords' in metadata:
         for item in metadata['keywords']:
             metadata['original_entities'].append({'entity': item.strip(), 'label': 'keyword', 'type': 'human' })
-#    if metadata:
-#        return save_annotation(metadata)
+    if metadata:
+        return save_annotation(metadata)
     return metadata 
 
 def doccano_annotation(document):
@@ -110,22 +111,50 @@ def doccano_annotation(document):
             texts.append(sentence)
     return (stream, spacydata)
 
-def save_annotation(document):
+def save_annotation(document, thisparams=None):
     (annotation, spacyanno) = doccano_annotation(document)
-    filename = "doccano-123.jsonl"
-    outfile = "/tmp/%s" % filename
-    outfilespacy = "/tmp/%s.spacy" % filename
+    params = {}
+    if thisparams:
+        params = thisparams
+    if 'url' in params:
+        params['urlm'] = re.search(r'Id\=(\S+)', params['url'])
+        params['domain'] = "%s://%s" % (urlparse(url).scheme, urlparse(url).netloc)
+        params['netloc'] = urlparse(url).netloc
+        if urlm:
+            params['doi'] = urlm.group(1)
+    if 'doi' in params:
+        filename = "%s.jsonl" % params['doi']
+    else:
+        filename = "doccano.jsonl"
+    if 'CACHEFOLDER' in os.environ:
+        tmpdir = os.environ['CACHEFOLDER']
+    else:
+        tmpdir = '/tmp'
+    if 'netloc' in params:
+        tmpdir = "%s/%s" % (tmpdir, params['netloc'])
+        if not os.path.exists(tmpdir):
+            os.makedirs(tmpdir)
+
+    outfile = "%s/%s" % (tmpdir, filename)
+    outfilespacy = "%s/%s.spacy" % (tmpdir, filename)
     with open(outfile, 'w', encoding='utf8') as f:
-        for item in annotation:
-            f.write("%s\n" % json.dumps(item))
-    send_to_doccano(filename)
-    #spacy_train = convert_to_spacy(annotation)
+        #for item in annotation:
+            #f.write("%s\n" % json.dumps(item))
+        f.write(json.dumps(annotation))
+
     if spacyanno:
         with open(outfilespacy, 'w', encoding='utf8') as spacyf:
             spacyf.write(json.dumps(spacyanno))
+    params[filename] = tmpdir
+    send_to_doccano(filename, params)
+    #spacy_train = convert_to_spacy(annotation)
     return (annotation, spacyanno)
 
-def send_to_doccano(filename):
+def send_to_doccano(filename, thisparams=None):
+    params = {}
+    if thisparams:
+        params = thisparams
+
     # instantiate a client and log in to a Doccano instance
     doccano_client = DoccanoClient(
     os.environ['DOCCANO_URL'],
@@ -135,7 +164,20 @@ def send_to_doccano(filename):
 
     # get basic information about the authorized user
     r_me = doccano_client.get_me()
-    r_json_upload = doccano_client.post_doc_upload(4, filename, '/tmp')
+    cachedir = '/tmp'
+    if 'CACHEFOLDER' in os.environ:
+        cachedir = os.environ['CACHEFOLDER']
+    project_id = 1
+    if 'DOCCANO_PROJECT_ID' in os.environ:
+        project_id = os.environ['DOCCANO_PROJECT_ID']
+    if 'DOCCANO_PROJECT_ID' in params:
+        project_id = params['DOCCANO_PROJECT_ID']
+    tmpdir = '/tmp'
+    if filename in params:
+        print("File %s" % filename)
+        print(project_id)
+        tmpdir2 = 0 #= params[filename]['tmpdir']
+    r_json_upload = doccano_client.post_doc_upload(project_id, filename, tmpdir, format='JSON')
     return
 
 def convert_to_spacy(lines):
