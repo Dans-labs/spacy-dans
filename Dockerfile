@@ -1,4 +1,5 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
+#FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7-2019-10-15
+FROM tiangolo/uvicorn-gunicorn-fastapi
 RUN apt update
 RUN apt-get -y install curl gnupg
 RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash -
@@ -26,3 +27,4 @@ COPY ./app /app
 COPY ./app/app.py /app/main.py
 RUN pip install -r /app/requirements.txt
 COPY ./app/simple_json.py /usr/local/lib/python3.7/site-packages/readabilipy/simple_json.py
+COPY ./__init__.py /usr/local/lib/python3.9/site-packages/doccano_api_client/__init__.py 
