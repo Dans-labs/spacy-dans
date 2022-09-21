@@ -20,6 +20,8 @@ def dataverse_metadata(response):
             metadata['title'] = str(typename['value'])
         if typename['typeName'] == 'dsDescription':
             metadata['description'] = typename['value'][0]['dsDescriptionValue']['value']
+        if typename['typeName'] == 'notesText':
+            metadata['notesText'] = typename['value']
         if typename['typeName'] == 'keyword':
             for i in range(0, len(typename['value'])):
                 if not 'keywords' in metadata:
@@ -27,6 +29,9 @@ def dataverse_metadata(response):
                 else:
                     metadata['keywords']+= typename['value'][i]['keywordValue']['value'].split(',')
     metadata['content']['fulltext'] = metadata['title'] + '. ' + metadata['description']
+    if 'notesText' in metadata:
+        metadata['content']['fulltext'] = metadata['content']['fulltext'] + '. ' + metadata['notesText']
+
     metadata['content']['text'] = []
     metadata['original_entities'] = []
     for item in metadata['content']['fulltext'].split('. '):
@@ -34,8 +39,8 @@ def dataverse_metadata(response):
     if 'keywords' in metadata:
         for item in metadata['keywords']:
             metadata['original_entities'].append({'entity': item.strip(), 'label': 'keyword', 'type': 'human' })
-    if metadata:
-        return save_annotation(metadata)
+    #if metadata:
+        #return save_annotation(metadata)
     return metadata 
 
 def doccano_annotation(document):
@@ -122,6 +127,7 @@ def save_annotation(document, thisparams=None):
         params['netloc'] = urlparse(url).netloc
         if urlm:
             params['doi'] = urlm.group(1)
+
     if 'doi' in params:
         filename = "%s.jsonl" % params['doi']
     else:
@@ -130,6 +136,7 @@ def save_annotation(document, thisparams=None):
         tmpdir = os.environ['CACHEFOLDER']
     else:
         tmpdir = '/tmp'
+
     if 'netloc' in params:
         tmpdir = "%s/%s" % (tmpdir, params['netloc'])
         if not os.path.exists(tmpdir):

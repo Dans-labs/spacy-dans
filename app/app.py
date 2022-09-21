@@ -113,6 +113,7 @@ async def dataverse(baseurl: str, doi: str, token: Optional[str] = None):
 
     if response:
         metadata = dataverse_metadata(response)
+        print(metadata)
         metadata['plain_text'] = metadata['content']['text']
         data = ngrams_tokens(False, metadata, params)
         if 'original_entities' in data:
