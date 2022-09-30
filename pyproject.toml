@@ -2,10 +2,10 @@
 name = "spacy-dans"
 version = "0.1.0"
 description = ""
-authors = ["ekoi <eko.indarto@dans.knaw.nl>"]
+authors = ['Slava Tykhonov <vyacheslav.tykhonov@dans.knaw.nl>', "Eko Indarto <eko.indarto@dans.knaw.nl>"]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
+python = ">=3.9.7,<3.11"
 pyDataverse = "^0.3.1"
 datefinder = "^0.7.1"
 asyncio = "^3.4.3"
