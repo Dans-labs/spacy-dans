@@ -19,9 +19,10 @@ from starlette.staticfiles import StaticFiles
 
 from Annotation import dataverse_metadata, save_annotation
 from SpacyDans import *
-from src.common import tags_metadata
+from src.common import tags_metadata, settings
 
-from utils import make_request
+from utils import make_request, process_csv, process_file
+
 # import codecs
 
 parsr = ParsrClient('localhost:3001')
@@ -55,7 +56,7 @@ class Item(BaseModel):
     content: Optional[str] = None
 
 templates = Jinja2Templates(directory='templates/')
-app.mount('/static', StaticFiles(directory='static'), name='static')
+app.mount('/static', StaticFiles(directory='../static'), name='static')
 
 app.add_middleware(
     CORSMiddleware,
@@ -104,7 +105,15 @@ async def dataverse(baseurl: str, doi: str, token: Optional[str] = None):
             # Download files
             for dv_files in response_files:
                 ct = dv_files["dataFile"]["contentType"]
-                print(ct)
+                fname = dv_files["dataFile"]["filename"]
+                #csv, tsv --> pandas
+                #xml, text, json --> process uses library
+                #pdf, ocr --> Parsr
+                if ct in ['text/csv', 'text/tsv']:
+                    process_csv(settings.TEMP_DANS_SPACY_FILE_PATH)
+                elif ct in ["application/pdf", "image/png", "image/jpeg"] :
+                    process_file(settings.TEMP_DANS_SPACY_FILE_PATH, fname, "1.0.0")
+
 
         return 'Error: no entities found in metadata'
     else:

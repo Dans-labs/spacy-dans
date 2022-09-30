@@ -23,14 +23,16 @@ def make_request(url):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f'Error on response.json() for "{url}"')
 
-def process_file(fpath):
+
+def process_file(fpath, doc_name, rev):
     parsr = ParsrClient('localhost:3001')
     try:
         parsr.send_document(file_path=fpath,
                             config_path='/src/conf/defaultConfig.json',
-                            document_name='The Readme', revision='1.0.0', refresh_period=1,
+                            document_name=doc_name, revision=rev, refresh_period=1,
                             save_request_id=True)
-        a = parsr.get_request_id(document_name='The Readme', revision='1.0.0')
+        a = parsr.get_request_id(document_name=doc_name, revision=rev)
+
         print('>>>>>>>a: ', a)
 
         check_status = True
@@ -54,3 +56,8 @@ def process_file(fpath):
     except Exception as e:
         print("error")
         print(e)
+
+
+def process_csv(fpath):
+    #todo: process here csv or tsv file
+    pass
