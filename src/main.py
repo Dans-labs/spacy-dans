@@ -7,7 +7,7 @@ from typing import Optional
 
 import urllib3
 import uvicorn
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 # from src.model import Vocabularies, WriteXML
 from fastapi.openapi.utils import get_openapi
@@ -21,7 +21,7 @@ from Annotation import dataverse_metadata, save_annotation
 from SpacyDans import *
 from src.common import tags_metadata, settings
 
-from utils import make_request, process_csv, process_file
+from utils import make_request, process_csv, process_file, download_file, upload_file_to_dataverse
 
 # import codecs
 
@@ -106,11 +106,28 @@ async def dataverse(baseurl: str, doi: str, token: Optional[str] = None):
             for dv_files in response_files:
                 ct = dv_files["dataFile"]["contentType"]
                 fname = dv_files["dataFile"]["filename"]
+                f_id = dv_files["dataFile"]["id"]
+                #Download files from dataverse
+
                 #csv, tsv --> pandas
                 #xml, text, json --> process uses library
                 #pdf, ocr --> Parsr
-                if ct in ['text/csv', 'text/tsv']:
-                    process_csv(settings.TEMP_DANS_SPACY_FILE_PATH)
+                if ct in ['text/tab-separated-values']:
+                    pass
+                # http://localhost:8080/api/admin/settings/:TabularIngestSizeLimit
+                # TODO: First check whether tabular file or not
+                # http://localhost:8080/api/access/datafile/16/metadata/ddi
+                # It isn't tabular file when the response code is 400 and the message is "This type of metadata is only available for tabular files."
+                elif ct in ['text/csv', 'text/tsv']:
+                    #download file:
+                    url = "%s/api/access/datafile/%s" % (baseurl, f_id)
+                    f_abs_path = os.path.join(settings.TEMP_DANS_SPACY_FILE_PATH, fname)
+                    downloaded_file = download_file(url, f_abs_path)
+                    f_tab = process_csv(downloaded_file)
+                    #upload the tabular file to dataverse
+                    resp_status = upload_file_to_dataverse(token, f_tab, f_id)
+                    if resp_status != 200:
+                        raise HTTPException(status_code=500, detail=f'Error on upload tabular file for "{url}"')
                 elif ct in ["application/pdf", "image/png", "image/jpeg"] :
                     process_file(settings.TEMP_DANS_SPACY_FILE_PATH, fname, "1.0.0")
 
