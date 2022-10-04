@@ -3,9 +3,9 @@
 fastapi_title = "DANS SPACY"
 fastapi_description = "This service supports .."
 
-temp_dans-spacy_file = "/tmp/dans-spacy"
+temp_dans_spacy_file_path = "/tmp/dans-spacy"
 #logs
-log_file = "../logs/ds.log"
+log_file = "../../logs/ds.log"
 log_level = 10
 log_format = "%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s"
 #Note: below the list of logging level

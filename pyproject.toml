@@ -3,7 +3,9 @@ name = "spacy-dans"
 version = "0.1.0"
 description = ""
 authors = ['Slava Tykhonov <vyacheslav.tykhonov@dans.knaw.nl>', "Eko Indarto <eko.indarto@dans.knaw.nl>"]
-
+packages = [
+    { include = "src"}
+]
 [tool.poetry.dependencies]
 python = ">=3.9.7,<3.11"
 pyDataverse = "^0.3.1"

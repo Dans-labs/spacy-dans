@@ -41,7 +41,7 @@ def create_request_session(url):
     return response
 
 
-def process_file(fpath, doc_name, rev):
+def process_file_using_parsr(fpath, doc_name, rev):
     parsr = ParsrClient('localhost:3001')
     try:
         parsr.send_document(file_path=fpath,

@@ -21,7 +21,7 @@ from Annotation import dataverse_metadata, save_annotation
 from SpacyDans import *
 from src.common import tags_metadata, settings
 
-from utils import make_request, process_csv, process_file, download_file, upload_file_to_dataverse
+from utils import make_request, process_csv, process_file_using_parsr, download_file, upload_file_to_dataverse
 
 # import codecs
 
@@ -129,7 +129,7 @@ async def dataverse(baseurl: str, doi: str, token: Optional[str] = None):
                     if resp_status != 200:
                         raise HTTPException(status_code=500, detail=f'Error on upload tabular file for "{url}"')
                 elif ct in ["application/pdf", "image/png", "image/jpeg"] :
-                    process_file(settings.TEMP_DANS_SPACY_FILE_PATH, fname, "1.0.0")
+                    process_file_using_parsr(settings.TEMP_DANS_SPACY_FILE_PATH, fname, "1.0.0")
 
 
         return 'Error: no entities found in metadata'
