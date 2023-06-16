@@ -17,6 +17,7 @@ services:
       - DOCCANO_USER=${DOCCANO_USER}
       - DOCCANO_PROJECT_ID=${DOCCANO_PROJECT_ID}
       - DOCCANO_PASSWORD=${DOCCANO_PASSWORD}
+      - TASKNAME=${TASKNAME}
       #- disable_nlp=${disable_nlp}
     volumes:
       - ./data:/tmp

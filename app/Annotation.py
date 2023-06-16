@@ -3,7 +3,7 @@ import requests
 import os
 import tempfile
 import time
-from doccano_api_client import DoccanoClient
+from doccano_client import DoccanoClient
 from urllib.parse import urlparse
 import re
 
@@ -163,14 +163,14 @@ def send_to_doccano(filename, thisparams=None):
         params = thisparams
 
     # instantiate a client and log in to a Doccano instance
-    doccano_client = DoccanoClient(
-    os.environ['DOCCANO_URL'],
+    doccano_client = DoccanoClient(os.environ['DOCCANO_URL'])
+    doccano_client.login(
     os.environ['DOCCANO_USER'],
     os.environ['DOCCANO_PASSWORD']
 )
 
     # get basic information about the authorized user
-    r_me = doccano_client.get_me()
+    #r_me = doccano_client.get_me()
     cachedir = '/tmp'
     if 'CACHEFOLDER' in os.environ:
         cachedir = os.environ['CACHEFOLDER']
@@ -184,7 +184,9 @@ def send_to_doccano(filename, thisparams=None):
         print("File %s" % filename)
         print(project_id)
         tmpdir2 = 0 #= params[filename]['tmpdir']
-    r_json_upload = doccano_client.post_doc_upload(project_id, filename, tmpdir, format='JSON')
+    #r_json_upload = doccano_client.post_doc_upload(project_id, filename, tmpdir, format='JSON')
+    taskname = os.environ['TASKNAME']
+    r_json_upload = doccano_client.upload(project_id, ["%s/%s" % (tmpdir, filename)], task=taskname, format='JSON')
     return
 
 def convert_to_spacy(lines):
