@@ -17,8 +17,8 @@ This pipeline is based on [Doccano](https://github.com/doccano/doccano), an Open
 You can install and run Doccano by running the commands below:
 ```
 git clone https://github.com/doccano/doccano
-cd doccano
-docker-compose -f docker-compose.dev.yml up -d
+cd doccano/docker
+docker-compose -f docker-compose.prod.yml up -d
 ```
 The service should be available on port 3000, for example, http://0.0.0.0:3000
 
