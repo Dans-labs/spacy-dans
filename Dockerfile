@@ -2,7 +2,7 @@
 FROM tiangolo/uvicorn-gunicorn-fastapi
 RUN apt update
 RUN apt-get -y install curl gnupg
-RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash -
+RUN curl -sL https://deb.nodesource.com/setup_20.x  | bash -
 RUN apt-get -y install poppler-utils nodejs wget bash vim git nodejs jq
 RUN pip install spacy
 RUN python -m spacy download nl_core_news_sm
