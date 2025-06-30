@@ -1,5 +1,6 @@
 #FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7-2019-10-15
-FROM tiangolo/uvicorn-gunicorn-fastapi
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.10
+RUN chmod 777 /tmp
 RUN apt-get update && apt-get install -y \
     bash \
     git \

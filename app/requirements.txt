@@ -13,3 +13,5 @@ lxml
 langdetect
 readabilipy
 doccano-client
+urllib3==1.26.15
+pydantic==2.11
